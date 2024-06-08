@@ -1,12 +1,13 @@
 import { setupWorker } from "msw/browser";
 import { env } from "../../env";
+import { ProductReturn } from "../register-product";
 import { deleteProductMock } from "./delete-product-mock";
 import { editProductMock } from "./edit-product-mock";
 import { getInfosProductsMock } from "./get-infos-products-mock";
 import { loginMock } from "./login-mock";
 import { registerProductMock } from "./register-product-mock";
 
-export const productsData = [
+export const productsData: ProductReturn[] = [
   {
     id: 0,
     name: "Produto1",
@@ -53,17 +54,11 @@ export const productsData = [
   },
 ];
 
-export const worker = setupWorker(
-  loginMock,
-  getInfosProductsMock,
-  registerProductMock,
-  deleteProductMock,
-  editProductMock,
-);
-
 export async function enableMSW() {
   if (env.MODE !== "test") {
     return;
   }
-  await worker.start();
+
+  const worker = setupWorker(loginMock, getInfosProductsMock, registerProductMock, deleteProductMock, editProductMock);
+  await worker.use();
 }

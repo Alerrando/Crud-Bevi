@@ -1,6 +1,14 @@
-import { ProductProps } from "./register-product";
+import { RegisterProductProps } from "./register-product";
 
-export async function editProduct({ id, name, description, price, status, stockQuantity, token }: ProductProps) {
+export async function editProduct({
+  id,
+  name,
+  description,
+  price,
+  status,
+  stockQuantity,
+  token,
+}: RegisterProductProps & { id: number }) {
   const response = await fetch("http://34.71.240.100/api/product/update", {
     method: "PUT",
     headers: {

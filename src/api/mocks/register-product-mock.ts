@@ -1,8 +1,8 @@
 import { HttpResponse, http } from "msw";
 import { productsData } from ".";
-import { RegisterProductProps } from "../register-product";
+import { ProductReturn } from "../register-product";
 
-export const registerProductMock = http.post<never, RegisterProductProps>(
+export const registerProductMock = http.post<never, ProductReturn>(
   "http://34.71.240.100/api/product/create",
   async ({ request }) => {
     const { name, description, price, status, stock_quantity: stockQuantity } = await request.json();
@@ -10,13 +10,13 @@ export const registerProductMock = http.post<never, RegisterProductProps>(
 
     if (
       token?.trim() === "fake_access_token" &&
-      name === "Produto7" &&
-      description === "Descrição do produto 7" &&
+      name === "Produto8" &&
+      description === "Descrição do produto 8" &&
       price === 50 &&
       status === 1 &&
       stockQuantity === 50
     ) {
-      productsData.push({
+      const aux: ProductReturn = {
         id: 4,
         name,
         description,
@@ -26,7 +26,8 @@ export const registerProductMock = http.post<never, RegisterProductProps>(
         updated_at: "2024-04-10T14:46:24.000000Z",
         created_at: "2024-04-10T14:46:24.000000Z",
         deleted_at: null,
-      });
+      };
+      productsData.push(aux);
 
       return HttpResponse.json({
         success: true,

@@ -1,7 +1,10 @@
+// src/env.ts
 import { z } from "zod";
 
 const envSchema = z.object({
-  MODE: z.enum(["test", "development"]),
+  MODE: z.enum(["development", "test"]),
 });
 
-export const env = envSchema.parse(import.meta.env);
+export const env = envSchema.parse({
+  MODE: "development" || "test",
+});

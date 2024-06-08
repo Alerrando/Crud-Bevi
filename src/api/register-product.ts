@@ -6,9 +6,24 @@ export interface ProductProps {
   stockQuantity: number;
   status: number;
   token: string;
+  updated_at: string;
+  created_at: string;
+  deleted_at: string | null;
 }
 
-export type RegisterProductProps = Omit<ProductProps, "id">;
+export interface ProductReturn {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  stock_quantity: number;
+  status: number;
+  updated_at: string;
+  created_at: string;
+  deleted_at: string | null;
+}
+
+export type RegisterProductProps = Omit<ProductProps, "id" | "updated_at" | "created_at" | "deleted_at">;
 
 export async function registerProduct({
   name,
