@@ -51,8 +51,8 @@ export function Form() {
     defaultValues: {
       name: edit?.name ?? "",
       description: edit?.description ?? "",
-      price: parseFloat(edit?.price ?? 0),
-      stock_quantity: parseFloat(edit?.stock_quantity ?? 0),
+      price: parseInt(String(edit?.price ?? 0)),
+      stock_quantity: parseInt(String(edit?.stock_quantity ?? 0)),
       status: String(edit?.status ?? "1"),
     },
   });
@@ -71,7 +71,9 @@ export function Form() {
   const { mutateAsync: registerProductFn } = useMutation({
     mutationFn: registerProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries(["products-list"]);
+      queryClient.invalidateQueries({
+        queryKey: ["products-list"],
+      });
       if (env.MODE === "test") getInfosProductsFunction();
     },
   });
@@ -79,7 +81,9 @@ export function Form() {
   const { mutateAsync: editProductFn } = useMutation({
     mutationFn: editProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries(["products-list"]);
+      queryClient.invalidateQueries({
+        queryKey: ["products-list"],
+      });
     },
   });
 
@@ -172,7 +176,7 @@ export function Form() {
         description: e.description,
         price: e.price,
         stockQuantity: e.stock_quantity,
-        status: parseFloat(e.status),
+        status: parseInt(e.status ?? "1"),
         token: infosLogin?.access_token,
       });
 
@@ -185,12 +189,12 @@ export function Form() {
   async function submitEditProduct(e: SchemaModalType) {
     try {
       await editProductFn({
-        id: parseFloat(searchParams.get("id")),
+        id: parseInt(searchParams.get("id") as string),
         name: e.name,
         description: e.description,
         price: e.price,
         stockQuantity: e.stock_quantity,
-        status: parseFloat(e.status as string),
+        status: parseInt(e.status as string),
         token: infosLogin?.access_token as string,
       });
 
