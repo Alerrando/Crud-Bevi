@@ -30,6 +30,7 @@ export function Table() {
     data: infosTable,
   } = useMutation({
     mutationFn: getInfosProducts,
+    gcTime: Infinity,
   });
 
   const { mutateAsync: deleteProductFn } = useMutation({
@@ -37,7 +38,6 @@ export function Table() {
     mutationKey: ["delete-product"],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products-list"] });
-      // eslint-disable-next-line eqeqeq
       if ((env as unknown as string) === "test") getInfosProductsFunction();
     },
   });
@@ -58,7 +58,7 @@ export function Table() {
 
   return (
     <>
-      <span>Quantidade de produtos: {isLoadingInfosProducts ? 0 : infosTable?.data.length}</span>
+      <span>Quantidade de produtos: {isLoadingInfosProducts ? 0 : infosTable?.data?.length ?? 0}</span>
       <div className={`${styles["table-container"]} ${styles[String(infosProductsFn === undefined)]}`}>
         <table className={`${styles.table} ${styles[String(isLoadingInfosProducts)]}`}>
           <thead>

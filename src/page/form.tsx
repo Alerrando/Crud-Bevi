@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChevronsLeft, Package } from "lucide-react";
-import React from "react";
+import React, { Key } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { editProduct } from "../api/edit-product";
 import { DataListProductsResponse, getInfosProducts } from "../api/get-infos-products";
 import { login } from "../api/login";
 import { registerProduct } from "../api/register-product";
+import { Input } from "../components/Input";
 import { env } from "../env";
 import { queryClient } from "../lib/react-query";
 import styles from "./form.module.scss";
@@ -66,6 +67,7 @@ export function Form() {
 
   const { mutateAsync: infosProductsFn } = useMutation({
     mutationFn: getInfosProducts,
+    gcTime: Infinity,
   });
 
   const { mutateAsync: registerProductFn } = useMutation({
@@ -87,6 +89,33 @@ export function Form() {
     },
   });
 
+  const inputs: React.ComponentProps<"input">[] = [
+    {
+      name: "name",
+      placeholder: "Digite o nome do Produto",
+      type: "text",
+      title: "Nome do Produto",
+    },
+    {
+      name: "description",
+      placeholder: "Digite a descrição do Produto",
+      type: "text",
+      title: "Descrição do Produto",
+    },
+    {
+      name: "price",
+      placeholder: "Digite o preço do Produto",
+      type: "number",
+      title: "Preço do Produto",
+    },
+    {
+      name: "stock_quantity",
+      placeholder: "Digite a quantidade do produto que tem no estoque",
+      type: "number",
+      title: "Quantidade do Produto",
+    },
+  ];
+
   return (
     <div className={styles["form-container"]}>
       <div className={styles.form}>
@@ -102,41 +131,27 @@ export function Form() {
         </header>
 
         <form onSubmit={handleSubmit(submit)}>
-          <div className={styles["form-input"]}>
-            <label htmlFor="">Nome</label>
-            <input type="text" {...register("name")} />
-            {errors.name && <span className={styles["error-input"]}>{errors.name?.message}</span>}
-          </div>
-
-          <div className={styles["form-input"]}>
-            <label htmlFor="">Descrição</label>
-            <input type="text" {...register("description")} />
-            {errors.description && <span className={styles["error-input"]}>{errors.description?.message}</span>}
-          </div>
-
-          <div className={styles["form-input"]}>
-            <label htmlFor="">Preço</label>
-            <input type="number" {...register("price")} />
-            {errors.price && <span className={styles["error-input"]}>{errors.price?.message}</span>}
-          </div>
-
-          <div className={styles["form-input"]}>
-            <label htmlFor="">Quantidade</label>
-            <input type="number" {...register("stock_quantity")} />
-            {errors.stock_quantity && <span className={styles["error-input"]}>{errors.stock_quantity?.message}</span>}
-          </div>
+          {inputs.map((input, index: Key) => (
+            <Input
+              name={input.name}
+              placeholder={input.placeholder}
+              register={register}
+              error={errors}
+              type={input.type}
+              title={input.title}
+              key={index}
+            />
+          ))}
 
           {edit && Object.keys(edit).length > 0 && (
-            <div className={styles["form-input"]}>
-              <label htmlFor="">Status</label>
-              <select {...register("status")} onChange={(e) => handleChangeStatus(e)}>
-                <option value={1}>Em Estoque</option>
-                <option value={2}>Em Reposição</option>
-                <option value={3}>Em Falta</option>
-              </select>
-
-              {errors.status && <span className={styles["error-input"]}>{errors.status?.message}</span>}
-            </div>
+            <Input
+              register={register}
+              error={errors}
+              name="status"
+              title="Status"
+              handleChangeStatus={handleChangeStatus}
+              select={true}
+            />
           )}
 
           <button type="submit">{searchParams.get("edit") === "true" ? "Editar" : "Cadastrar"}</button>
@@ -171,13 +186,11 @@ export function Form() {
 
   async function submitRegisterProduct(e: SchemaModalType) {
     try {
+      const { status, ...rest } = e;
       await registerProductFn({
-        name: e.name,
-        description: e.description,
-        price: e.price,
-        stockQuantity: e.stock_quantity,
-        status: parseInt(e.status ?? "1"),
+        status: parseInt(status ?? "1"),
         token: infosLogin?.access_token,
+        ...rest,
       });
 
       toast.success("Produto cadastrado com sucesso!");
@@ -188,14 +201,12 @@ export function Form() {
 
   async function submitEditProduct(e: SchemaModalType) {
     try {
+      const { status, ...rest } = e;
       await editProductFn({
         id: parseInt(searchParams.get("id") as string),
-        name: e.name,
-        description: e.description,
-        price: e.price,
-        stockQuantity: e.stock_quantity,
-        status: parseInt(e.status as string),
+        status: parseInt(status as string),
         token: infosLogin?.access_token as string,
+        ...rest,
       });
 
       toast.success("Produto editado com sucesso!");
