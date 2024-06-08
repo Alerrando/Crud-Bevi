@@ -1,0 +1,41 @@
+.header-container{
+    align-items: center;
+    border-bottom: 2px solid #666;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    width: 100%;
+
+    h1{
+        color: #fff;
+        font-size: 1.2rem;
+
+        @media (min-width: 764px){
+            font-size: 2.2rem;
+        }
+    }
+
+    a{
+        align-items: center;
+        background-color: transparent;
+        border: 1px solid rgb(22 163 74);
+        border-radius: 8px;
+        color: rgb(74 222 128);
+        cursor: pointer;
+        display: flex;
+        font-family: 14px;
+        gap: 8px;
+        padding: 6px 8px;
+        transition: all .5s ease;
+
+        &:hover{
+            background-color: rgb(22 163 74);
+            color: #fff;
+        }
+
+        @media (min-width: 764px){
+            font-size: 1rem;
+            padding: 8px 16px;
+        }
+    }
+}
