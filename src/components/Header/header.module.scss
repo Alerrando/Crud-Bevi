@@ -1,4 +1,4 @@
-.header-container{
+.header-container {
     align-items: center;
     border-bottom: 2px solid #fffafa;
     display: flex;
@@ -6,35 +6,107 @@
     padding-bottom: 8px;
     width: 100%;
 
-    h1{
+    h1 {
         color: #000;
-        font-size: 1.2rem;
+        font-size: 1rem;
 
-        @media (min-width: 764px){
+        @media (min-width: 764px) {
             font-size: 2.2rem;
         }
     }
 
-    a{
+    .wrap {
+        width: 35%;
+
+        .search {
+            width: 100%;
+            position: relative;
+            display: flex;
+
+           input {
+                width: 100%;
+                border: 2px solid #333;
+                border-right: none;
+                height: 100%;
+                font-size: 12px;
+                padding: 3px 4px;
+                border-radius: 5px 0 0 5px;
+                outline: none;
+                color: #000;
+
+                @media (min-width: 768px) {
+                    font-size: 1rem;
+                    padding: 6px 8px;
+                }
+            }
+
+            .searchButton {
+                align-items: center;
+                width: 30px;
+                border: 1px solid #333;
+                background: #333;
+                display: flex;
+                justify-content: center;
+                color: #fff;
+                border-radius: 0 5px 5px 0;
+                cursor: pointer;
+                font-size: 20px;
+
+                &:hover{
+                    background-color: #000;
+                    border-bottom: 1px solid #000;
+                }
+
+                svg{
+                    height: 14px;
+                    width: 14px;
+
+                    @media (min-width: 764px) {
+                        height: 16px;
+                        width: 16px;
+                    }
+                }
+            }
+
+            @media (min-width: 764px) {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 764px) {
+            width: 30%;
+        }
+    }
+
+    a {
         align-items: center;
         background-color: transparent;
         border: 1px solid #179947;
         border-radius: 8px;
         color: #179947;
+        content: "";
         cursor: pointer;
         display: flex;
         font-family: 14px;
         gap: 8px;
         padding: 6px 8px;
         text-decoration: none;
-        transition: all .5s ease;
+        transition: all 0.5s ease;
 
-        &:hover{
+        &:hover {
             background-color: rgb(22 163 74);
             color: #fff;
         }
 
-        @media (min-width: 764px){
+        span{
+            display: none;
+
+            @media (min-width: 764px) {
+                display: block;
+            }
+        }
+
+        @media (min-width: 764px) {
             font-size: 1rem;
             padding: 8px 16px;
         }

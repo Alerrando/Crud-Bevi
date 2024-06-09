@@ -68,9 +68,8 @@ export function Form() {
   const { mutateAsync: registerProductFn } = useMutation({
     mutationFn: registerProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["products-list"],
-      });
+      toast.success("Produto cadastrado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["products-list"] });
       getInfosProductsFunction();
     },
   });
@@ -78,9 +77,8 @@ export function Form() {
   const { mutateAsync: editProductFn } = useMutation({
     mutationFn: editProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["products-list"],
-      });
+      toast.success("Produto editado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["products-list"] });
     },
   });
 
@@ -191,8 +189,6 @@ export function Form() {
         stockQuantity,
         ...rest,
       });
-
-      toast.success("Produto cadastrado com sucesso!");
     } catch (error) {
       toast.error("Erro ao cadastrar produto!");
     }
@@ -208,8 +204,6 @@ export function Form() {
         stockQuantity,
         ...rest,
       });
-
-      toast.success("Produto editado com sucesso!");
     } catch (error) {
       toast.error("Erro ao editar produto!");
     }

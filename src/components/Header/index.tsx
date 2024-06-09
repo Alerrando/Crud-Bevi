@@ -1,17 +1,35 @@
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import styles from "./header.module.scss";
 
 export function Header() {
+  const [search, setSearch] = useState<string>("");
+  // eslint-disable-next-line no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
+
   return (
     <header className={styles["header-container"]}>
       <h1>Cadastro de Produtos</h1>
 
+      <div className={styles.wrap}>
+        <div className={styles.search}>
+          <input type="text" placeholder="Nome do produto" onChange={(e) => setSearch(e.target.value)} />
+          <button type="submit" className={styles.searchButton} onClick={() => handleSearchProductFilter()}>
+            <Search size={16} />
+          </button>
+        </div>
+      </div>
+
       <Link to="/form?modal=true">
         <Plus size={16} />
-        Adicionar
+        <span>Adicionar</span>
       </Link>
     </header>
   );
+
+  function handleSearchProductFilter() {
+    setSearchParams({ search });
+  }
 }

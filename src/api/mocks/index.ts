@@ -55,7 +55,7 @@ export const productsData: ProductReturn[] = [
 ];
 
 export async function enableMSW() {
-  if (env.MODE !== "test" && window.location.href !== "http://localhost:50789/") {
+  if (env.MODE !== "test" && !window.location.href.includes("http://localhost:50789/")) {
     return;
   }
 

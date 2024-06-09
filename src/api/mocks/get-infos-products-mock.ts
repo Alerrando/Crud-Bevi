@@ -6,7 +6,6 @@ export const getInfosProductsMock = http.post<never, GetInfosProductsProps>(
   "http://34.71.240.100/api/product/list",
   async ({ request }) => {
     const token = request.headers.get("Authorization")?.replace("Bearer", "");
-
     if (token?.trim() === "fake_access_token") {
       return HttpResponse.json({
         success: true,
