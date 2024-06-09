@@ -11,7 +11,7 @@ import { DataListProductsResponse, getInfosProducts } from "../api/get-infos-pro
 import { login } from "../api/login";
 import { registerProduct } from "../api/register-product";
 import { Input } from "../components/Input";
-import { queryClient } from "../lib/react-query";
+import { queryClient } from "../util/react-query";
 import styles from "./form.module.scss";
 
 const schemaModal = z.object({

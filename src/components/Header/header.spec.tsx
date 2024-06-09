@@ -9,8 +9,8 @@ import { editProductMock } from "../../api/mocks/edit-product-mock";
 import { getInfosProductsMock } from "../../api/mocks/get-infos-products-mock";
 import { loginMock } from "../../api/mocks/login-mock";
 import { registerProductMock } from "../../api/mocks/register-product-mock";
-import { queryClient } from "../../lib/react-query";
 import { Form } from "../../page/form";
+import { queryClient } from "../../util/react-query";
 
 test("should display the table values correctly", async () => {
   const worker = setupServer(loginMock, getInfosProductsMock, registerProductMock, deleteProductMock, editProductMock);

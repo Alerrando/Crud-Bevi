@@ -9,7 +9,7 @@ import { editProductMock } from "../../api/mocks/edit-product-mock";
 import { getInfosProductsErrorMock, getInfosProductsMock } from "../../api/mocks/get-infos-products-mock";
 import { loginMock } from "../../api/mocks/login-mock";
 import { registerProductMock } from "../../api/mocks/register-product-mock";
-import { queryClient } from "../../lib/react-query";
+import { queryClient } from "../../util/react-query";
 
 describe("Table", () => {
   test("should display the table values correctly", async () => {

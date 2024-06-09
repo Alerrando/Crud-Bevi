@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { deleteProduct } from "../../api/delete-product";
 import { DataListProductsResponse, getInfosProducts } from "../../api/get-infos-products";
 import { LoginProps, login } from "../../api/login";
-import { queryClient } from "../../lib/react-query";
+import { queryClient } from "../../util/react-query";
 import { ConfirmDialog } from "../ConfirmDialog";
 import { SkeletonTable } from "./skeleton-table";
 import { TableRow } from "./table-row";
