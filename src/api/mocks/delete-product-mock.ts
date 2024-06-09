@@ -5,11 +5,11 @@ import { DeleteProductProps } from "../delete-product";
 export const deleteProductMock = http.delete<never, DeleteProductProps>(
   "http://34.71.240.100/api/product/delete",
   async ({ request }) => {
-    const date = await request.json();
+    const { id } = await request.json();
     const token = request.headers.get("Authorization")?.replace("Bearer", "");
 
-    if (token?.trim() === "fake_access_token") {
-      productsData.splice(date.id, 1);
+    if (token?.trim() === "fake_access_token" && id === 3) {
+      productsData.splice(id, 1);
 
       return HttpResponse.json({
         success: true,
@@ -28,13 +28,6 @@ export const deleteProductMock = http.delete<never, DeleteProductProps>(
       });
     }
 
-    return new HttpResponse(
-      `{
-        "success": false,
-        "code": 422,
-        "message": "Não foi possível deletar produto."
-       }`,
-      { status: 422 },
-    );
+    return HttpResponse.error();
   },
 );
