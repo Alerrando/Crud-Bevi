@@ -14,6 +14,8 @@ Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas i
 - <a target="_blank" href="https://playwright.dev">Playwright</a>: Ferramenta de automação de teste para aplicativos da web.
 - <a target="_blank" href="https://tanstack.com">@tanstack/react-query</a>: Biblioteca para gerenciamento de estado e cache de dados na aplicação React.
 - <a target="_blank" href="https://zod.dev">Zod</a>: Biblioteca para validação de esquemas de dados.
+- <a target="_blank" href="https://www.react-hook-form.com">React Hook Form</a>:  Biblioteca para gerenciamento de formulários em aplicações React
+- <a target="_blank" href="https://sass-lang.com">Sass</a>:  SASS é uma linguagem de extensão do CSS
 - <a target="_blank" href="https://sonner.emilkowal.ski">Sonner</a>: Biblioteca para exibir notificações na aplicação.
 
 ## Funcionalidades
@@ -26,7 +28,7 @@ Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas i
 ### Como Utilizar
 
 1. **Instalação**: Clone o repositório e instale as dependências utilizando npm ou yarn:
-    ```
+    ```bash
       git clone https://github.com/seu-usuario/crud-bevi.git
       cd crud-bevi
       npm install
@@ -34,13 +36,13 @@ Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas i
 
 2. **Execução do Servidor de Desenvolvimento**: Execute o servidor de desenvolvimento para visualizar a aplicação no navegador:
 
-    ```
+    ```bash
       npm run dev
     ```
 
 3. **Execução dos Testes Automatizados:**: Execute os testes automatizados utilizando o Playwright:
 
-    ```
+    ```bash
       npm test
     ```
 
@@ -50,8 +52,18 @@ Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas i
 O componente `Header` é responsável por exibir o cabeçalho da página, incluindo o título "Cadastro de Produtos" e um campo de busca.
 
 ### Exemplo de Uso
-```jsx
+```tsx
+import { Plus, Search } from "lucide-react";
+
+import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import styles from "./header.module.scss";
+
 export function Header() {
+  const [search, setSearch] = useState<string>("");
+  // eslint-disable-next-line no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
+
   return (
     <header className={styles["header-container"]}>
       <h1>Cadastro de Produtos</h1>
@@ -76,6 +88,10 @@ export function Header() {
       </Link>
     </header>
   );
+
+  function handleSearchProductFilter() {
+    setSearchParams({ search });
+  }
 }
 ```
 
@@ -92,8 +108,66 @@ O componente Table é responsável por exibir uma tabela com os produtos cadastr
 - **stock_quantity: (number)** A quantidade em estoque do produto.
 
 ### Exemplo de Uso
-```jsx
+```tsx
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Key, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+import { deleteProduct } from "../../api/delete-product";
+import { DataListProductsResponse, getInfosProducts } from "../../api/get-infos-products";
+import { LoginProps, login } from "../../api/login";
+import { queryClient } from "../../util/react-query";
+import { ConfirmDialog } from "../ConfirmDialog";
+import { SkeletonTable } from "./skeleton-table";
+import { TableRow } from "./table-row";
+import styles from "./table.module.scss";
+
+export type ModalType = {
+  status: boolean;
+  confirm: boolean;
+  productId: number | null;
+};
+
 export function Table() {
+  const [openModal, setOpenModal] = useState<ModalType>({} as ModalType);
+  const [searchParams] = useSearchParams();
+  const searchName = searchParams.get("search") ?? "";
+  const { data: infosLogin } = useQuery<LoginProps | undefined>({
+    queryFn: login,
+    queryKey: ["login-token"],
+    staleTime: Infinity,
+  });
+  const navigate = useNavigate();
+
+  const {
+    mutateAsync: infosProductsFn,
+    isPending: isLoadingInfosProducts,
+    data: infosTable,
+  } = useMutation({
+    mutationFn: getInfosProducts,
+    gcTime: Infinity,
+  });
+
+  const { mutateAsync: deleteProductFn } = useMutation({
+    mutationFn: deleteProduct,
+    mutationKey: ["delete-product"],
+    onSuccess: () => {
+      toast.success("Produto deletado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["products-list"] });
+      getInfosProductsFunction();
+    },
+  });
+
+  useEffect(() => {
+    (async () => {
+      await callBackInfosProducts();
+    })();
+  }, [infosLogin]);
+
+  useEffect(() => {
+    handleModal();
+  }, [openModal.confirm]);
+
   return (
     <>
       <span>Quantidade de produtos: {isLoadingInfosProducts ? true : infosTable?.data?.length ?? 0}</span>
@@ -137,6 +211,38 @@ export function Table() {
       {openModal.status && <ConfirmDialog openModal={openModal} setOpenModal={setOpenModal} />}
     </>
   );
+
+  async function callBackInfosProducts() {
+    if (infosLogin?.access_token !== undefined) await infosProductsFn(infosLogin?.access_token as string);
+  }
+
+  function handleModal() {
+    if (openModal.confirm && openModal.productId !== null) {
+      deleteProducts(openModal.productId);
+      setOpenModal({ status: false, confirm: false, productId: null });
+    }
+  }
+
+  async function getInfosProductsFunction() {
+    await infosProductsFn(infosLogin?.access_token as string);
+  }
+
+  async function deleteProducts(id: number) {
+    try {
+      await deleteProductFn({ id, token: infosLogin?.access_token ?? "" });
+    } catch (error) {
+      toast.error("Erro ao deletar produto!");
+    }
+  }
+
+  function openDeleteModal(productId: number) {
+    setOpenModal({ status: true, confirm: false, productId });
+  }
+
+  function editProduct(id: number) {
+    queryClient.setQueryData(["products-list-cache"], infosTable?.data);
+    navigate(`form?modal=true&edit=true&id=${id}`);
+  }
 }
 ```
 
@@ -145,8 +251,118 @@ export function Table() {
 O componente Form é responsável por exibir um formulário para adicionar ou editar produtos na loja. Ele inclui campos para inserir o nome, descrição, preço, quantidade em estoque e status do produto.
 
 ### Exemplo de Uso
-```jsx
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ChevronsLeft, Package } from "lucide-react";
+import React, { Key } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod";
+import { editProduct } from "../api/edit-product";
+import { DataListProductsResponse, getInfosProducts } from "../api/get-infos-products";
+import { login } from "../api/login";
+import { registerProduct } from "../api/register-product";
+import { Input } from "../components/Input";
+import { queryClient } from "../util/react-query";
+import styles from "./form.module.scss";
+
+const schemaModal = z.object({
+  name: z.string().min(3, "Nome deve ter até 3 caracteres"),
+  description: z.string().min(10, "Descrição deve ter até 10 caracteres"),
+  price: z
+    .string({ invalid_type_error: "Preço não pode ser 0 ou vazio" })
+    .min(1, "Preço não pode ser 0 ou vazio")
+    .transform((val) => parseInt(val)),
+  stock_quantity: z
+    .string({ invalid_type_error: "Quantidade não pode ser 0 ou vazio" })
+    .min(1, "Quantidade não pode ser 0 ou vazio")
+    .transform((val) => parseInt(val)),
+  status: z.string().nullish(),
+});
+
+type SchemaModalType = z.infer<typeof schemaModal>;
+
 export function Form() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const cacheData: DataListProductsResponse[] | undefined = queryClient.getQueryData(["products-list-cache"]);
+  const edit: DataListProductsResponse | undefined = cacheData?.filter(
+    (data: DataListProductsResponse) => data.id === parseFloat(searchParams.get("id") ?? "-1"),
+  )[0];
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<SchemaModalType>({
+    resolver: zodResolver(schemaModal),
+    defaultValues: {
+      name: edit?.name ?? "",
+      description: edit?.description ?? "",
+      price: parseInt(String(edit?.price ?? 0)),
+      stock_quantity: parseInt(String(edit?.stock_quantity ?? 0)),
+      status: String(edit?.status ?? "1"),
+    },
+  });
+  const navigate = useNavigate();
+
+  const { data: infosLogin } = useQuery({
+    queryFn: login,
+    queryKey: ["login-token"],
+    staleTime: Infinity,
+  });
+
+  const { mutateAsync: infosProductsFn } = useMutation({
+    mutationFn: getInfosProducts,
+    gcTime: Infinity,
+  });
+
+  const { mutateAsync: registerProductFn } = useMutation({
+    mutationFn: registerProduct,
+    onSuccess: () => {
+      toast.success("Produto cadastrado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["products-list"] });
+      getInfosProductsFunction();
+    },
+  });
+
+  const { mutateAsync: editProductFn } = useMutation({
+    mutationFn: editProduct,
+    onSuccess: () => {
+      toast.success("Produto editado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["products-list"] });
+    },
+  });
+
+  const inputs: React.ComponentProps<"input">[] = [
+    {
+      name: "name",
+      placeholder: "Digite o nome do Produto",
+      type: "text",
+      title: "Nome do Produto",
+    },
+    {
+      name: "description",
+      placeholder: "Digite a descrição do Produto",
+      type: "text",
+      title: "Descrição do Produto",
+    },
+    {
+      name: "price",
+      placeholder: "Digite o preço do Produto",
+      type: "number",
+      title: "Preço do Produto",
+    },
+    {
+      name: "stock_quantity",
+      placeholder: "Digite a quantidade do produto que tem no estoque",
+      type: "number",
+      title: "Quantidade do Produto",
+    },
+  ];
+
   return (
     <div className={styles["form-container"]}>
       <div className={styles.form}>
@@ -193,6 +409,59 @@ export function Form() {
       <img src="/aside-img-form.png" alt="" />
     </div>
   );
+
+  function handleModalClick() {
+    setSearchParams({});
+    navigate("/");
+  }
+
+  function handleChangeStatus(e: React.ChangeEvent<HTMLSelectElement>) {
+    setValue("status", e.target.value);
+  }
+
+  async function getInfosProductsFunction() {
+    await infosProductsFn(infosLogin?.access_token as string);
+  }
+
+  async function submit(e: SchemaModalType) {
+    if (searchParams.get("edit") === "true") {
+      await submitEditProduct(e);
+    } else {
+      await submitRegisterProduct(e);
+    }
+
+    setSearchParams({});
+    navigate("/");
+  }
+
+  async function submitRegisterProduct(e: SchemaModalType) {
+    try {
+      const { status, stock_quantity: stockQuantity, ...rest } = e;
+      await registerProductFn({
+        status: parseInt(status ?? "1"),
+        token: infosLogin?.access_token,
+        stockQuantity,
+        ...rest,
+      });
+    } catch (error) {
+      toast.error("Erro ao cadastrar produto!");
+    }
+  }
+
+  async function submitEditProduct(e: SchemaModalType) {
+    try {
+      const { status, stock_quantity: stockQuantity, ...rest } = e;
+      await editProductFn({
+        id: parseInt(searchParams.get("id") as string),
+        status: parseInt(status as string),
+        token: infosLogin?.access_token as string,
+        stockQuantity,
+        ...rest,
+      });
+    } catch (error) {
+      toast.error("Erro ao editar produto!");
+    }
+  }
 }
 ```
 
@@ -241,7 +510,7 @@ Playwright é usado para teste end-to-end.
 
 #### Configuração do Playwright
 A configuração do Playwright é definida em playwright.config.ts:
-```
+```ts
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
@@ -264,13 +533,13 @@ export default defineConfig({
 ### Executando Testes
 Para executar os testes no Playwright:
 
-```
+```bash
 npx playwright test --ui
 ```
 
 ### Exemplo de Teste E2E
 Abaixo está um exemplo de um teste e2e de registro de produto está sendo cadastrado corretamente:
-```
+```ts
 test("should verify is the register product functionality  is right", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
 
@@ -295,7 +564,7 @@ Além dos testes end-to-end com Playwright, este projeto também utiliza o Jest 
 
 ### Configuração do Jest
 A configuração do Jest está definida no arquivo jest.config.js:
-```
+```ts
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
@@ -306,7 +575,7 @@ module.exports = {
   },
   transform: {
     "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.tsx?$": "babel-jest",
   },
   testEnvironmentOptions: {
     customExportConditions: [""],
@@ -316,13 +585,13 @@ module.exports = {
 
 ### Executando Testes Unitários
 Para executar os testes unitários, utilize o seguinte comando:
-```
+```bash
 npm run test
 ```
 
 ### Exemplo de Teste Unitário
 Abaixo está um exemplo de um teste unitário de verificação de se os produtos da tabela estão sendo mostrados corretamente:
-```
+```tsx
 test("should display the table values correctly", async () => {
     const worker = setupServer(
       loginMock,
