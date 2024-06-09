@@ -1,3 +1,5 @@
+@import "/src/util/mixins";
+
 .form-container{
     background-color: #fff;
     display: flex;
@@ -7,12 +9,11 @@
     width: 100%;
 
     .form{
+        @include w-h-full;
         display: flex;
-        height: 100%;
         flex-direction: column;
         gap: 1.3rem;
-        padding: 6rem 2rem;
-        width: 100%;
+        padding: 2rem;
 
         .header-form{
             display: flex;
@@ -21,15 +22,14 @@
             position: relative;
 
             .header-form-title{
-                align-items: center;
+                @include flex-center;
                 color: #000;
-                display: flex;
                 gap: 8px;
 
                 h2{
                     font-size: 1.5rem;
 
-                    @media (min-width: 768px) {
+                    @include respond-to {
                         font-size: 1.9rem;
                     }
                 }
@@ -38,7 +38,7 @@
                     height: 1.2rem;
                     width: 1.2rem;
 
-                    @media (min-width: 768px) {
+                    @include respond-to {
                         height: 1.5rem;
                         width: 1.5rem;
                     }
@@ -56,18 +56,17 @@
                 font-size: 14px;
                 opacity: 0.7;
 
-                @media (min-width: 768px) {
+                @include respond-to {
                     font-size: 16px;
                 }
             }
         }
 
         form{
+            @include w-h-full;
             display: flex;
-            height: 100%;
             flex-direction: column;
             gap: 1.5rem;
-            width: 100%;
 
             button{
                 background-color: #22C55E;
@@ -87,7 +86,7 @@
             }
         }
 
-        @media (min-width: 768px) {
+        @include respond-to {
             gap: 3rem;
             padding: 4rem 2rem;
             width: 50%;
@@ -97,7 +96,7 @@
     img{
         display: none;
 
-        @media (min-width: 768px) {
+        @include respond-to {
             border-radius: 50px;
             height: 100%;
             display: block;
@@ -107,7 +106,7 @@
         }
     }
 
-    @media (min-width: 768px) {
+    @include respond-to {
         flex-direction: row;
     }
 }

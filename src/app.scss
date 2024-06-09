@@ -1,3 +1,5 @@
+@import "/src/util/mixins";
+
 *{
     box-sizing: border-box;
     padding: 0;
@@ -5,8 +7,7 @@
 }
 
 .main-container, .container{
-    align-items: center;
-    display: flex;
+    @include flex-center;
     justify-content: center;
 }
 
@@ -23,15 +24,14 @@
         width: 95%;
 
         .section-container{
+            @include w-h-full;
             align-items: flex-end;
             display: flex;
-            height: 100%;
             flex-direction: column;
             gap: 1rem;
             justify-content: flex-start;
             overflow-y: auto;
             text-align: end;
-            width: 100%;
 
             span{
                 color: #000;

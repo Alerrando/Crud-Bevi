@@ -1,0 +1,15 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+}
+
+@mixin w-h-full{
+    height: 100%;
+    width: 100%;
+}
+
+@mixin respond-to() {
+    @media (min-width: 764px) {
+        @content;
+    }
+}

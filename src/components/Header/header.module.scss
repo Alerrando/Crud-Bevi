@@ -1,7 +1,8 @@
+@import "/src/util/mixins";
+
 .header-container {
-    align-items: center;
+    @include flex-center;
     border-bottom: 2px solid #fffafa;
-    display: flex;
     justify-content: space-between;
     padding-bottom: 8px;
     width: 100%;
@@ -10,7 +11,7 @@
         color: #000;
         font-size: 1rem;
 
-        @media (min-width: 764px) {
+        @include respond-to {
             font-size: 2.2rem;
         }
     }
@@ -23,70 +24,67 @@
             position: relative;
             display: flex;
 
-           input {
-                width: 100%;
+            input {
+                @include w-h-full;
                 border: 2px solid #333;
                 border-right: none;
-                height: 100%;
                 font-size: 12px;
                 padding: 3px 4px;
                 border-radius: 5px 0 0 5px;
                 outline: none;
                 color: #000;
 
-                @media (min-width: 768px) {
+                @include respond-to {
                     font-size: 1rem;
                     padding: 6px 8px;
                 }
             }
 
             .searchButton {
-                align-items: center;
+                @include flex-center;
                 width: 30px;
                 border: 1px solid #333;
                 background: #333;
-                display: flex;
-                justify-content: center;
                 color: #fff;
+                justify-content: center;
                 border-radius: 0 5px 5px 0;
                 cursor: pointer;
                 font-size: 20px;
 
-                &:hover{
+                &:hover {
                     background-color: #000;
                     border-bottom: 1px solid #000;
                 }
 
-                svg{
+                svg {
                     height: 14px;
                     width: 14px;
 
-                    @media (min-width: 764px) {
+                    @include respond-to {
                         height: 16px;
                         width: 16px;
                     }
                 }
             }
 
-            @media (min-width: 764px) {
+            @include respond-to {
                 width: 100%;
             }
         }
 
-        @media (min-width: 764px) {
+        @include respond-to {
             width: 30%;
         }
     }
 
     a {
-        align-items: center;
+        @include flex-center;
         background-color: transparent;
         border: 1px solid #179947;
         border-radius: 8px;
         color: #179947;
         content: "";
         cursor: pointer;
-        display: flex;
         font-family: 14px;
         gap: 8px;
         padding: 6px 8px;
@@ -98,15 +96,15 @@
             color: #fff;
         }
 
-        span{
+        span {
             display: none;
 
-            @media (min-width: 764px) {
+            @include respond-to {
                 display: block;
             }
         }
 
-        @media (min-width: 764px) {
+        @include respond-to {
             font-size: 1rem;
             padding: 8px 16px;
         }
