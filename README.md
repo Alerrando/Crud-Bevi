@@ -5,16 +5,16 @@ Este é um projeto CRUD simples utilizando React para a construção da interfac
 ## Pré-requisitos
 Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas instaladas em seu sistema:
 
-- <a href="https://nodejs.org/en">Node.js</a>
-- <a href="https://www.git-scm.com/downloads">Git</a>
+- <a target="_blank" href="https://nodejs.org/en">Node.js</a>
+- <a target="_blank" href="https://www.git-scm.com/downloads">Git</a>
 
 ## Tecnologias Utilizadas
 
-- <a href="https://react.dev">React</a>: Biblioteca JavaScript para construção de interfaces de usuário.
-- <a href="https://playwright.dev">Playwright</a>: Ferramenta de automação de teste para aplicativos da web.
-- <a href="https://tanstack.com">@tanstack/react-query</a>: Biblioteca para gerenciamento de estado e cache de dados na aplicação React.
-- <a href="https://zod.dev">Zod</a>: Biblioteca para validação de esquemas de dados.
-- <a href="https://sonner.emilkowal.ski">Sonner</a>: Biblioteca para exibir notificações na aplicação.
+- <a target="_blank" href="https://react.dev">React</a>: Biblioteca JavaScript para construção de interfaces de usuário.
+- <a target="_blank" href="https://playwright.dev">Playwright</a>: Ferramenta de automação de teste para aplicativos da web.
+- <a target="_blank" href="https://tanstack.com">@tanstack/react-query</a>: Biblioteca para gerenciamento de estado e cache de dados na aplicação React.
+- <a target="_blank" href="https://zod.dev">Zod</a>: Biblioteca para validação de esquemas de dados.
+- <a target="_blank" href="https://sonner.emilkowal.ski">Sonner</a>: Biblioteca para exibir notificações na aplicação.
 
 ## Funcionalidades
 

@@ -15,8 +15,13 @@ export function Header() {
 
       <div className={styles.wrap}>
         <div className={styles.search}>
-          <input type="text" placeholder="Nome do produto" onChange={(e) => setSearch(e.target.value)} />
-          <button type="submit" className={styles.searchButton} onClick={() => handleSearchProductFilter()}>
+          <input name="search" type="text" placeholder="Nome do produto" onChange={(e) => setSearch(e.target.value)} />
+          <button
+            type="submit"
+            className={styles.searchButton}
+            onClick={() => handleSearchProductFilter()}
+            data-testid="button-search"
+          >
             <Search size={16} />
           </button>
         </div>
