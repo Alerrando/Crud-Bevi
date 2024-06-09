@@ -205,3 +205,6 @@ test("should display the table values correctly", async () => {
 ## Demos Páginas
 <img src="./github/img-home.png" />
 <img src="./github/img-register.png" />
+
+<hr />
+<p>Alerrando © 2024 Obrigado por acessar</p>

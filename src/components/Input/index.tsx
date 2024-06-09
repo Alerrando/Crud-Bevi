@@ -29,13 +29,15 @@ export function Input({
 }: InputProps) {
   return (
     <>
-      <div className={styles["form-input"]}>
-        <label htmlFor={name}>{title}</label>
-        <input type={type} {...register(name as keyof Fields)} placeholder={placeholder} />
-        {error[name as keyof Fields] && (
-          <span className={styles["error-input"]}>{error[name as keyof Fields]?.message}</span>
-        )}
-      </div>
+      {!select && (
+        <div className={styles["form-input"]}>
+          <label htmlFor={name}>{title}</label>
+          <input type={type} {...register(name as keyof Fields)} placeholder={placeholder} />
+          {error[name as keyof Fields] && (
+            <span className={styles["error-input"]}>{error[name as keyof Fields]?.message}</span>
+          )}
+        </div>
+      )}
 
       {select && (
         <div className={styles["form-input"]}>
