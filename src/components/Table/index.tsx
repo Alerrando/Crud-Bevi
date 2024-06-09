@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { deleteProduct } from "../../api/delete-product";
 import { DataListProductsResponse, getInfosProducts } from "../../api/get-infos-products";
 import { LoginProps, login } from "../../api/login";
-import { env } from "../../env";
 import { queryClient } from "../../lib/react-query";
 import styles from "./table.module.scss";
 
@@ -38,7 +37,7 @@ export function Table() {
     mutationKey: ["delete-product"],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products-list"] });
-      if ((env as unknown as string) === "test") getInfosProductsFunction();
+      getInfosProductsFunction();
     },
   });
 

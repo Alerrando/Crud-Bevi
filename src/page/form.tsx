@@ -11,7 +11,6 @@ import { DataListProductsResponse, getInfosProducts } from "../api/get-infos-pro
 import { login } from "../api/login";
 import { registerProduct } from "../api/register-product";
 import { Input } from "../components/Input";
-import { env } from "../env";
 import { queryClient } from "../lib/react-query";
 import styles from "./form.module.scss";
 
@@ -19,18 +18,14 @@ const schemaModal = z.object({
   name: z.string().min(3, "Nome deve ter até 3 caracteres"),
   description: z.string().min(10, "Descrição deve ter até 10 caracteres"),
   price: z
-    .string()
+    .string({ invalid_type_error: "Preço não pode ser 0 ou vazio" })
     .min(1, "Preço não pode ser 0 ou vazio")
     .transform((val) => parseInt(val)),
   stock_quantity: z
-    .string()
-    .min(1, "Quantidade é obrigatório")
+    .string({ invalid_type_error: "Quantidade não pode ser 0 ou vazio" })
+    .min(1, "Quantidade não pode ser 0 ou vazio")
     .transform((val) => parseInt(val)),
-  status: z
-    .string({
-      message: "Status é obrigatório",
-    })
-    .nullish(),
+  status: z.string().nullish(),
 });
 
 type SchemaModalType = z.infer<typeof schemaModal>;
@@ -76,7 +71,7 @@ export function Form() {
       queryClient.invalidateQueries({
         queryKey: ["products-list"],
       });
-      if (env.MODE === "test") getInfosProductsFunction();
+      getInfosProductsFunction();
     },
   });
 
@@ -139,6 +134,7 @@ export function Form() {
               error={errors}
               type={input.type}
               title={input.title}
+              select={false}
               key={index}
             />
           ))}
@@ -186,26 +182,28 @@ export function Form() {
 
   async function submitRegisterProduct(e: SchemaModalType) {
     try {
-      const { status, ...rest } = e;
+      const { status, stock_quantity: stockQuantity, ...rest } = e;
       await registerProductFn({
         status: parseInt(status ?? "1"),
         token: infosLogin?.access_token,
+        stockQuantity,
         ...rest,
       });
 
       toast.success("Produto cadastrado com sucesso!");
     } catch (error) {
-      toast.error("Erro ao cadastrar produto");
+      toast.error("Erro ao cadastrar produto!");
     }
   }
 
   async function submitEditProduct(e: SchemaModalType) {
     try {
-      const { status, ...rest } = e;
+      const { status, stock_quantity: stockQuantity, ...rest } = e;
       await editProductFn({
         id: parseInt(searchParams.get("id") as string),
         status: parseInt(status as string),
         token: infosLogin?.access_token as string,
+        stockQuantity,
         ...rest,
       });
 

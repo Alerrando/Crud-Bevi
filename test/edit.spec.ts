@@ -3,14 +3,13 @@ import { expect, test } from "@playwright/test";
 test("should verify is the edit product functionality  is right", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
 
-  await page.getByRole("row", { name: "Produto3 Descrição do produto" }).getByRole("img").first().click();
+  await page.getByRole("row", { name: "Descrição do produto 3" }).getByRole("img").first().click();
 
   await page.locator('input[name="name"]').fill("Produto10");
   await page.locator('input[name="description"]').fill("Descrição do produto 10");
   await page.locator('input[name="price"]').fill("22");
   await page.locator('input[name="stock_quantity"]').fill("88");
   const locator = await page.getByRole("combobox");
-  console.log(locator);
   locator.selectOption(["3"]);
 
   await page.getByRole("button", { name: "Editar" }).click();

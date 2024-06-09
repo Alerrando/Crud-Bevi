@@ -11,6 +11,9 @@ export default defineConfig({
     setupFiles: ["./test/setup.ts"],
     environment: "happy-dom",
   },
+  define: {
+    "process.env.MODE": JSON.stringify(process.env.MODE || "development"),
+  },
 } as UserConfig & {
   test: InlineConfig;
 });

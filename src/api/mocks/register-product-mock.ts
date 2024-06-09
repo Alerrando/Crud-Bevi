@@ -46,15 +46,6 @@ export const registerProductMock = http.post<never, ProductReturn>(
       });
     }
 
-    return new HttpResponse(
-      `{
-        "success": false,
-        "message": "Os dados fornecidos são inválidos.",
-        "code": 422,
-        "data": [],
-        "errors": []
-       }`,
-      { status: 422 },
-    );
+    return HttpResponse.error();
   },
 );

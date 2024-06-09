@@ -55,10 +55,10 @@ export const productsData: ProductReturn[] = [
 ];
 
 export async function enableMSW() {
-  if (env.MODE !== "test") {
+  if (env.MODE !== "test" && window.location.href !== "http://localhost:50789/") {
     return;
   }
 
   const worker = setupWorker(loginMock, getInfosProductsMock, registerProductMock, deleteProductMock, editProductMock);
-  await worker.use();
+  await worker.start();
 }
