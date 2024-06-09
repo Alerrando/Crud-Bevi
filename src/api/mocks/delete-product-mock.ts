@@ -7,6 +7,7 @@ export const deleteProductMock = http.delete<never, DeleteProductProps>(
   async ({ request }) => {
     const { id } = await request.json();
     const token = request.headers.get("Authorization")?.replace("Bearer", "");
+    console.log(id);
 
     if (token?.trim() === "fake_access_token" && id === 3) {
       productsData.splice(id, 1);

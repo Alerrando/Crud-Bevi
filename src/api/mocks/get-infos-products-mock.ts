@@ -37,3 +37,17 @@ export const getInfosProductsMock = http.post<never, GetInfosProductsProps>(
     );
   },
 );
+
+export const getInfosProductsErrorMock = http.post<never, GetInfosProductsProps>(
+  "http://34.71.240.100/api/product/list",
+  async () => {
+    return new HttpResponse(
+      `{   
+        "success": false,
+        "code": 422,
+        "message": "Não há produtos a serem listados." 
+       }`,
+      { status: 422 },
+    );
+  },
+);

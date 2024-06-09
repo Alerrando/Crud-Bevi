@@ -96,7 +96,7 @@ export function Table() {
             </tbody>
           ) : (
             <>
-              {infosProductsFn === undefined ? (
+              {infosTable && infosTable?.data.length === 0 ? (
                 <div className={styles["container-empty"]}>
                   <img src="/undraw_no_data_re_kwbl.svg" alt="" />
                   <span>Sem dados para mostrar</span>

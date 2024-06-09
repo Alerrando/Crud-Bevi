@@ -4,7 +4,7 @@ test.describe("delete", () => {
   test("should verify is the delete product functionality  is right", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("row", { name: "Descrição do produto 3" }).getByRole("img").nth(1).click();
+    await page.getByRole("row", { name: "Descrição do produto 4" }).getByRole("img").nth(1).click();
 
     await page.getByRole("button", { name: "Confirmar" }).click();
 

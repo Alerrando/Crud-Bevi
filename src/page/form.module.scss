@@ -1,5 +1,5 @@
 .form-container{
-    background-color: #111;
+    background-color: #fff;
     display: flex;
     justify-content: center;
     height: 100vh;
@@ -21,7 +21,7 @@
 
             .header-form-title{
                 align-items: center;
-                color: white;
+                color: #000;
                 display: flex;
                 gap: 8px;
 
@@ -80,7 +80,7 @@
 
                 &:hover{
                     background-color: #22C55E;
-                    color: white;
+                    color: #fff;
                 }
             }
         }
