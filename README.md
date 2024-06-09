@@ -113,11 +113,94 @@ export default defineConfig({
 Para executar os testes ni Playwright:
 
 ```
-npx playwright test
+npx playwright test --ui
+```
+
+### Exemplo de Teste E2E
+Abaixo está um exemplo de um teste e2e de registro de produto está sendo cadastrado corretamente:
+```
+test("should verify is the register product functionality  is right", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    await page.getByRole("link", { name: "Adicionar" }).click();
+
+    await page.locator('input[name="name"]').fill("Produto8");
+    await page.locator('input[name="description"]').fill("Descrição do produto 8");
+    await page.locator('input[name="price"]').fill("50");
+    await page.locator('input[name="stock_quantity"]').fill("50");
+    await page.getByRole("button", { name: "Cadastrar" }).click();
+    expect(page.getByText("Produto8")).toBeVisible();
+
+    await page.waitForTimeout(3000);
+});
 ```
 
 ### Demo
 <img src="./github/Animação.gif" />
+
+## Testes Unitários com Jest
+Além dos testes end-to-end com Playwright, este projeto também utiliza o Jest para testes unitários. Jest é um framework de teste em JavaScript que permite testar a lógica de sua aplicação de maneira isolada.
+
+### Configuração do Jest
+A configuração do Jest está definida no arquivo jest.config.js:
+```
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "jsdom",
+  testPathIgnorePatterns: ["/node_modules/", "/test"],
+  setupFilesAfterEnv: ["./src/util/index.ts"],
+  moduleNameMapper: {
+    "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+  },
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.jsx?$": "babel-jest",
+  },
+  testEnvironmentOptions: {
+    customExportConditions: [""],
+  },
+};
+```
+
+### Executando Testes Unitários
+Para executar os testes unitários, utilize o seguinte comando:
+```
+npm run test
+```
+
+### Exemplo de Teste Unitário
+Abaixo está um exemplo de um teste unitário de verificação de se os produtos da tabela estão sendo mostrados corretamente:
+```
+test("should display the table values correctly", async () => {
+    const worker = setupServer(
+      loginMock,
+      getInfosProductsMock,
+      registerProductMock,
+      deleteProductMock,
+      editProductMock,
+    );
+    await worker.listen();
+
+    const { getAllByRole, getByText } = render(
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(getAllByRole("row")).toHaveLength(5);
+        expect(getByText("Produto1")).toBeInTheDocument();
+        expect(getByText("Produto2")).toBeInTheDocument();
+        expect(getByText("Produto3")).toBeInTheDocument();
+        expect(getByText("Produto4")).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+  });
+```
 
 ## Demos Páginas
 <img src="./github/img-home.png" />
