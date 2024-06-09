@@ -44,6 +44,158 @@ Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas i
       npm test
     ```
 
+## Componentes
+### `Header`
+
+O componente `Header` é responsável por exibir o cabeçalho da página, incluindo o título "Cadastro de Produtos" e um campo de busca.
+
+### Exemplo de Uso
+```jsx
+export function Header() {
+  return (
+    <header className={styles["header-container"]}>
+      <h1>Cadastro de Produtos</h1>
+
+      <div className={styles.wrap}>
+        <div className={styles.search}>
+          <input name="search" type="text" placeholder="Nome do produto" onChange={(e) => setSearch(e.target.value)} />
+          <button
+            type="submit"
+            className={styles.searchButton}
+            onClick={() => handleSearchProductFilter()}
+            data-testid="button-search"
+          >
+            <Search size={16} />
+          </button>
+        </div>
+      </div>
+
+      <Link to="/form?modal=true">
+        <Plus size={16} />
+        <span>Adicionar</span>
+      </Link>
+    </header>
+  );
+}
+```
+
+### `Table`
+
+O componente Table é responsável por exibir uma tabela com os produtos cadastrados na loja. Ele também inclui funcionalidades como filtragem por nome, exclusão de produtos e edição de produtos.
+
+### Propriedades
+**Products: (array)** Uma matriz de objetos representando os produtos da loja. Cada objeto de produto deve ter as seguintes propriedades:
+- **id: (number)** O ID único do produto.
+- **name: (string)** O nome do produto.
+- **description: (string)** A descrição do produto.
+- **price: (number)** O preço do produto.
+- **stock_quantity: (number)** A quantidade em estoque do produto.
+
+### Exemplo de Uso
+```jsx
+export function Table() {
+  return (
+    <>
+      <span>Quantidade de produtos: {isLoadingInfosProducts ? true : infosTable?.data?.length ?? 0}</span>
+      <div className={`${styles["table-container"]} ${styles[String(infosProductsFn === undefined)]}`}>
+        <table className={`${styles.table} ${styles[String(isLoadingInfosProducts)]}`}>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Status</th>
+              <th>Quantidade no Estoque</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+          {isLoadingInfosProducts || (infosTable && infosTable?.data?.length === 0) ? (
+            <SkeletonTable />
+          ) : (
+            <>
+              <tbody>
+                {infosTable?.data
+                  ?.sort((data1: DataListProductsResponse, data2: DataListProductsResponse) => data1.id - data2.id)
+                  .filter((product: DataListProductsResponse) =>
+                    product.name.toLowerCase().includes(searchName.toLowerCase().trim()),
+                  )
+                  .map((product: DataListProductsResponse, index: Key) => (
+                    <TableRow
+                      product={product}
+                      editProduct={editProduct}
+                      openDeleteModal={openDeleteModal}
+                      key={index}
+                    />
+                  ))}
+              </tbody>
+            </>
+          )}
+        </table>
+      </div>
+
+      {openModal.status && <ConfirmDialog openModal={openModal} setOpenModal={setOpenModal} />}
+    </>
+  );
+}
+```
+
+### `Form`
+
+O componente Form é responsável por exibir um formulário para adicionar ou editar produtos na loja. Ele inclui campos para inserir o nome, descrição, preço, quantidade em estoque e status do produto.
+
+### Exemplo de Uso
+```jsx
+export function Form() {
+  return (
+    <div className={styles["form-container"]}>
+      <div className={styles.form}>
+        <header className={styles["header-form"]}>
+          <div className={styles["header-form-title"]}>
+            <Package size={22} />
+            <h2>Cadastro de Produtos</h2>
+          </div>
+
+          <ChevronsLeft className={styles.return} size={24} onClick={() => handleModalClick()} />
+
+          <span>Cadastre um novo produto para a sua loja!</span>
+        </header>
+
+        <form onSubmit={handleSubmit(submit)}>
+          {inputs.map((input, index: Key) => (
+            <Input
+              name={input.name}
+              placeholder={input.placeholder}
+              register={register}
+              error={errors}
+              type={input.type}
+              title={input.title}
+              select={false}
+              key={index}
+            />
+          ))}
+
+          {edit && Object.keys(edit).length > 0 && (
+            <Input
+              register={register}
+              error={errors}
+              name="status"
+              title="Status"
+              handleChangeStatus={handleChangeStatus}
+              select={true}
+            />
+          )}
+
+          <button type="submit">{searchParams.get("edit") === "true" ? "Editar" : "Cadastrar"}</button>
+        </form>
+      </div>
+
+      <img src="/aside-img-form.png" alt="" />
+    </div>
+  );
+}
+```
+
 ## Detalhes dos Testes Automatizados
 Os testes automatizados foram escritos utilizando Playwright e abrangem as seguintes funcionalidades:
 
