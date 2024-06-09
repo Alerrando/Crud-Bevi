@@ -87,8 +87,8 @@ crud-bevi/
 ## Playwright Testes
 Playwright é usado para teste end-to-end.
 
-#### Configuration
-Playwright configuration is defined in playwright.config.ts:
+#### Configuração do Playwright
+A configuração do Playwright é definida em playwright.config.ts:
 ```
 import { defineConfig } from "@playwright/test";
 
@@ -110,7 +110,7 @@ export default defineConfig({
 ```
 
 ### Executando Testes
-Para executar os testes ni Playwright:
+Para executar os testes no Playwright:
 
 ```
 npx playwright test --ui
