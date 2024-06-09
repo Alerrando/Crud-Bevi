@@ -4,15 +4,13 @@ import { Table } from "./components/Table";
 
 export function App() {
   return (
-    <>
-      <main className="main-container">
-        <div className="container">
-          <Header />
-          <section className="section-container">
-            <Table />
-          </section>
-        </div>
-      </main>
-    </>
+    <main className="main-container">
+      <div className="container">
+        <Header />
+        <section className="section-container">
+          <Table />
+        </section>
+      </div>
+    </main>
   );
 }

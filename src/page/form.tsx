@@ -153,6 +153,8 @@ export function Form() {
           <button type="submit">{searchParams.get("edit") === "true" ? "Editar" : "Cadastrar"}</button>
         </form>
       </div>
+
+      <img src="/aside-img-form.png" alt="" />
     </div>
   );
 

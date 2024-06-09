@@ -1,13 +1,13 @@
 .header-container{
     align-items: center;
-    border-bottom: 2px solid #666;
+    border-bottom: 2px solid #fffafa;
     display: flex;
     justify-content: space-between;
     padding-bottom: 8px;
     width: 100%;
 
     h1{
-        color: #fff;
+        color: #000;
         font-size: 1.2rem;
 
         @media (min-width: 764px){
@@ -18,14 +18,15 @@
     a{
         align-items: center;
         background-color: transparent;
-        border: 1px solid rgb(22 163 74);
+        border: 1px solid #179947;
         border-radius: 8px;
-        color: rgb(74 222 128);
+        color: #179947;
         cursor: pointer;
         display: flex;
         font-family: 14px;
         gap: 8px;
         padding: 6px 8px;
+        text-decoration: none;
         transition: all .5s ease;
 
         &:hover{
