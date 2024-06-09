@@ -2,15 +2,21 @@
 
 Este é um projeto CRUD simples utilizando React para a construção da interface do usuário (UI) e Playwright para testes automatizados. O objetivo é criar, ler, atualizar e excluir (CRUD) produtos de uma loja fictícia chamada Bevi.
 
-### Tecnologias Utilizadas
+## Pré-requisitos
+Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas instaladas em seu sistema:
 
-- **React**: Biblioteca JavaScript para construção de interfaces de usuário.
-- **Playwright**: Ferramenta de automação de teste para aplicativos da web.
-- **@tanstack/react-query**: Biblioteca para gerenciamento de estado e cache de dados na aplicação React.
-- **Zod**: Biblioteca para validação de esquemas de dados.
-- **Sonner**: Biblioteca para exibir notificações na aplicação.
+- <a href="https://nodejs.org/en">Node.js</a>
+- <a href="https://www.git-scm.com/downloads">Git</a>
 
-### Funcionalidades
+## Tecnologias Utilizadas
+
+- <a href="https://react.dev">React</a>: Biblioteca JavaScript para construção de interfaces de usuário.
+- <a href="https://playwright.dev">Playwright</a>: Ferramenta de automação de teste para aplicativos da web.
+- <a href="https://tanstack.com">@tanstack/react-query</a>: Biblioteca para gerenciamento de estado e cache de dados na aplicação React.
+- <a href="https://zod.dev">Zod</a>: Biblioteca para validação de esquemas de dados.
+- <a href="https://sonner.emilkowal.ski">Sonner</a>: Biblioteca para exibir notificações na aplicação.
+
+## Funcionalidades
 
 - **Listagem de Produtos**: Visualização dos produtos cadastrados na loja.
 - **Cadastro de Produtos**: Adição de novos produtos ao estoque.
@@ -63,10 +69,10 @@ crud-bevi/
 ├── public/                   # Arquivos públicos
 ├── src/                      # Código fonte
 │   ├── api/                  # Funções de solicitação de API
-│         ├── mock/           # Funções de mocks das solicitações da API
+│         ├── mock/           # Funções de mock para simulação de requisições de API durante os testes.
 │   ├── components/           # Componentes reutilizáveis
-│   ├── util/                 # Funções reutilizaveis
-│   ├── pages/                # Páginas
+│   ├── util/                 # Funções utilitárias
+│   ├── pages/                # Páginas principais
 │   ├── App.tsx               # Componente App
 │   ├── main.tsx              # Função principal
 │   └── vite-env.d.ts         # Tipos de ambiente Vite
@@ -112,3 +118,7 @@ npx playwright test
 
 ### Demo
 <img src="./github/Animação.gif" />
+
+## Demos Páginas
+<img src="./github/img-home.png" />
+<img src="./github/img-register.png" />
