@@ -40,12 +40,6 @@ Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas i
       npm run dev
     ```
 
-3. **Execução dos Testes Automatizados:**: Execute os testes automatizados utilizando o Playwright:
-
-    ```bash
-      npm test
-    ```
-
 ## Componentes
 ### `Header`
 
@@ -598,6 +592,11 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
   },
 });
+```
+
+###  Instalar dependência do Playwright
+```bash
+npx playwright install
 ```
 
 ### Executando Testes
