@@ -549,22 +549,30 @@ A estrutura do projeto está organizada da seguinte forma:
 ```
 crud-bevi/
 │
+├── github/                   # Imagens/Gifs do projeto para o github
 ├── public/                   # Arquivos públicos
 ├── src/                      # Código fonte
 │   ├── api/                  # Funções de solicitação de API
 │         ├── mock/           # Funções de mock para simulação de requisições de API durante os testes.
 │   ├── components/           # Componentes reutilizáveis
-│   ├── util/                 # Funções utilitárias
 │   ├── pages/                # Páginas principais
+│   ├── util/                 # Funções utilitárias
 │   ├── App.tsx               # Componente App
+│   ├── env.tsx               # Arquivo env do projeto
 │   ├── main.tsx              # Função principal
+│   ├── router.tsx            # Função de rotas
 │   └── vite-env.d.ts         # Tipos de ambiente Vite
 ├── test/                     # Playwright testes
-├── .eslintrc.js              # ESLint configuração
-├── jest.config.js            # Jest configuração
+├── eslint.config.js          # ESLint configuração
+├── index.html                # HTML principal
+├── jest.config.js            # Jest configuração de formtação
 ├── package.json              # Dependências e scripts do projeto
+├── .eslintrc.json            # ESLint configuração
+├── package-lock.json         # Arquivo de bloqueio de dependências do npm
 ├── tsconfig.json             # TypeScript configuração
+├── tsconfig.node.json        # Configuração específica do TypeScript para Node.js
 └── vite.config.ts            # Vite configuração
+├── playwright.config.ts      # Playwright configuração
 ```
 
 ## Playwright Testes
