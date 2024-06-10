@@ -1,6 +1,6 @@
 ## Projeto CRUD Bevi
 
-Este é um projeto CRUD simples utilizando React para a construção da interface do usuário (UI) e Playwright para testes automatizados. O objetivo é criar, ler, atualizar e excluir (CRUD) produtos de uma loja fictícia chamada Bevi.
+Projet para vaga de Desenvolvedor na empresa Bevi, que consiste em Crud, utilizando React, Scss, React Query, Playwright (para testes e2e), Jest (para testes unitarios)
 
 ## Pré-requisitos
 Antes de iniciar a instalação, certifique-se de ter as seguintes ferramentas instaladas em seu sistema:
