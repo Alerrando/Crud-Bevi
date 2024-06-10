@@ -1,0 +1,45 @@
+@import "/src/util/mixins";
+
+.token-timer{
+    @include flex-center;
+    background-color: #333;
+    border-radius: 8px;
+    bottom: 4px;
+    color: #fff;
+    gap: 1rem;
+    left: 8px;
+    padding: 8px;
+    position: fixed;
+    width: auto;
+
+    p{
+        font-size: 0.9rem;
+
+        @include respond-to {
+            font-size: 1rem;
+        }
+    }
+
+    button{
+        background: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        padding: 6px 8px;
+        transition: background-color 0.5s ease-in-out;
+
+        &:hover{
+            background-color: rgba($color: #fff, $alpha: 0.9);
+        }
+
+        @include respond-to {
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+    }
+
+    @include respond-to {
+        padding: 8px 16px;
+    }
+}

@@ -14,6 +14,7 @@ import { Input } from "../components/Input";
 import { queryClient } from "../util/react-query";
 import styles from "./form.module.scss";
 
+// Definindo o schema Zod para validação de dados do formulário
 const schemaModal = z.object({
   name: z.string().min(3, "Nome deve ter até 3 caracteres"),
   description: z.string().min(10, "Descrição deve ter até 10 caracteres"),
@@ -31,7 +32,7 @@ const schemaModal = z.object({
 type SchemaModalType = z.infer<typeof schemaModal>;
 
 export function Form() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams(); // Pega os parâmetros da URL
   const cacheData: DataListProductsResponse[] | undefined = queryClient.getQueryData(["products-list-cache"]);
   const edit: DataListProductsResponse | undefined = cacheData?.filter(
     (data: DataListProductsResponse) => data.id === parseFloat(searchParams.get("id") ?? "-1"),
@@ -54,17 +55,20 @@ export function Form() {
   });
   const navigate = useNavigate();
 
+  /* useQuery da função de buscar o token */
   const { data: infosLogin } = useQuery({
     queryFn: login,
     queryKey: ["login-token"],
     staleTime: Infinity,
   });
 
+  /* useMutation da função de buscar produtos */
   const { mutateAsync: infosProductsFn } = useMutation({
     mutationFn: getInfosProducts,
     gcTime: Infinity,
   });
 
+  /* useMutation da função de registrar produto */
   const { mutateAsync: registerProductFn } = useMutation({
     mutationFn: registerProduct,
     onSuccess: () => {
@@ -74,6 +78,7 @@ export function Form() {
     },
   });
 
+  /* useMutation da função de editar produto */
   const { mutateAsync: editProductFn } = useMutation({
     mutationFn: editProduct,
     onSuccess: () => {
@@ -82,6 +87,7 @@ export function Form() {
     },
   });
 
+  // Configurando o useForm para controlar o formulário
   const inputs: React.ComponentProps<"input">[] = [
     {
       name: "name",
@@ -124,6 +130,7 @@ export function Form() {
         </header>
 
         <form onSubmit={handleSubmit(submit)}>
+          {/* Renderização dos inputs do formulário */}
           {inputs.map((input, index: Key) => (
             <Input
               name={input.name}
@@ -137,6 +144,7 @@ export function Form() {
             />
           ))}
 
+          {/* Renderizando o input de status, apenas se estiver editando */}
           {edit && Object.keys(edit).length > 0 && (
             <Input
               register={register}
@@ -180,6 +188,7 @@ export function Form() {
     navigate("/");
   }
 
+  // Função de registro de um novo produto
   async function submitRegisterProduct(e: SchemaModalType) {
     try {
       const { status, stock_quantity: stockQuantity, ...rest } = e;
@@ -194,6 +203,7 @@ export function Form() {
     }
   }
 
+  // Função de edição de um produto
   async function submitEditProduct(e: SchemaModalType) {
     try {
       const { status, stock_quantity: stockQuantity, ...rest } = e;

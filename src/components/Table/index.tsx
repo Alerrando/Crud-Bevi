@@ -19,8 +19,10 @@ export type ModalType = {
 
 export function Table() {
   const [openModal, setOpenModal] = useState<ModalType>({} as ModalType);
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams(); // Captura os parâmetros da URL
   const searchName = searchParams.get("search") ?? "";
+
+  /* useQuery da função de fazer login */
   const { data: infosLogin } = useQuery<LoginProps | undefined>({
     queryFn: login,
     queryKey: ["login-token"],
@@ -28,6 +30,7 @@ export function Table() {
   });
   const navigate = useNavigate();
 
+  /* useMutation da função de buscar produtos */
   const {
     mutateAsync: infosProductsFn,
     isPending: isLoadingInfosProducts,
@@ -37,12 +40,13 @@ export function Table() {
     gcTime: Infinity,
   });
 
+  /* useMutation da função de deletar produto */
   const { mutateAsync: deleteProductFn } = useMutation({
     mutationFn: deleteProduct,
     mutationKey: ["delete-product"],
     onSuccess: () => {
       toast.success("Produto deletado com sucesso!");
-      queryClient.invalidateQueries({ queryKey: ["products-list"] });
+      queryClient.invalidateQueries({ queryKey: ["login-token"] });
       getInfosProductsFunction();
     },
   });
@@ -51,14 +55,15 @@ export function Table() {
     (async () => {
       await callBackInfosProducts();
     })();
-  }, [infosLogin]);
+  }, [infosLogin]); // Atualiza os produtos quando o usuário faz login
 
   useEffect(() => {
     handleModal();
-  }, [openModal.confirm]);
+  }, [openModal.confirm]); // Lida com a ação de confirmação de exclusão de produto
 
   return (
     <>
+      {/* Exibe a quantidade de produtos */}
       <span>Quantidade de produtos: {isLoadingInfosProducts ? true : infosTable?.data?.length ?? 0}</span>
       <div className={`${styles["table-container"]} ${styles[String(infosProductsFn === undefined)]}`}>
         <table className={`${styles.table} ${styles[String(isLoadingInfosProducts)]}`}>
@@ -73,11 +78,13 @@ export function Table() {
             </tr>
           </thead>
 
+          {/* Exibe uma tabela ou um esqueleto de tabela durante o carregamento */}
           {isLoadingInfosProducts || (infosTable && infosTable?.data?.length === 0) ? (
             <SkeletonTable />
           ) : (
             <>
               <tbody>
+                {/* Mapeia os produtos para exibição na tabela */}
                 {infosTable?.data
                   ?.sort((data1: DataListProductsResponse, data2: DataListProductsResponse) => data1.id - data2.id)
                   .filter((product: DataListProductsResponse) =>
@@ -97,6 +104,7 @@ export function Table() {
         </table>
       </div>
 
+      {/* Exibe o modal de confirmação de exclusão */}
       {openModal.status && <ConfirmDialog openModal={openModal} setOpenModal={setOpenModal} />}
     </>
   );
@@ -112,10 +120,12 @@ export function Table() {
     }
   }
 
+  // Função de atualizar a lista de produtos
   async function getInfosProductsFunction() {
     await infosProductsFn(infosLogin?.access_token as string);
   }
 
+  // Função de deletar um produto
   async function deleteProducts(id: number) {
     try {
       await deleteProductFn({ id, token: infosLogin?.access_token ?? "" });
